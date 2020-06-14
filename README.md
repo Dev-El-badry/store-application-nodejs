@@ -1,8 +1,8 @@
-#Inventory App Using Nodejs And MySQL
+# Inventory App Using Nodejs And MySQL
 
 an app to keep track of your inventory of items
 
-##Backend Setup
+## Backend Setup
 
 * Install dependencies: `npm install`
 * Create `.env` with your values
