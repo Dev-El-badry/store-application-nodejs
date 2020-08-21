@@ -1,36 +1,13 @@
 const Knex = require('knex');
 const tableNames = require('../../src/constants/tableNames');
+const {
+    addDefaultColumns,
+    createNameTable,
+    references,
+    url,
+    email
+} = require('../../src/lib/tabletUtils');
 
-function addDefaultColumns(table) {
-    table.timestamps(false, true);
-    table.datetime('deleted_at');
-}
-  
-function createNameTable(knex, table_name) {
-    return knex.schema.createTable(table_name, (table) => {
-        table.increments().notNullable();
-        table.string('name', 254).notNullable().unique();
-
-        addDefaultColumns(table);
-    });
-}
-
-function references(table, tableName) {
-    table
-    .integer(`${tableName}_id`)
-    .unsigned()
-    .references('id')
-    .inTable(tableName)
-    .onDelete('cascade');
-}
-
-function url(table, table_name) {
-    table.string(table_name, 2000);
-}
-
-function email(table, table_name) {
-    return table.string(table_name, 254);
-}
 
 exports.up = async (knex) => {
 
@@ -45,9 +22,17 @@ exports.up = async (knex) => {
             addDefaultColumns(table);
         }),
         createNameTable(knex, tableNames.item_type),
-        createNameTable(knex, tableNames.country),
-        createNameTable(knex, tableNames.state),
+       
         createNameTable(knex, tableNames.shape),
+
+        knex.schema.createTable(tableNames.country, (table) => {
+            table.increments().notNullable();
+            table.string('name', 254);
+            table.string('code');
+            addDefaultColumns(table);
+        }),
+         
+
         knex.schema.createTable(tableNames.location, (table) => {
             table.increments().notNullable();
             table.text('description', 1000);
@@ -55,6 +40,16 @@ exports.up = async (knex) => {
             addDefaultColumns(table);
         })
     ]);
+
+    await knex.schema.createTable(tableNames.state, (table) => {
+        table.increments().notNullable();
+        table.string('name', 254);
+        table.string('code');
+        table.integer('country_id');
+        // references(table, tableNames.country, false);
+        addDefaultColumns(table);
+    }),
+    
 
     await knex.schema.createTable(tableNames.address, (table) => {
         table.increments().notNullable();
@@ -65,8 +60,8 @@ exports.up = async (knex) => {
         table.float('latitude').notNullable();
         table.float('longitude').notNullable();
         addDefaultColumns(table);
-        references(table, 'state');
-        references(table, 'country');
+        references(table, tableNames.state);
+       
     });
 
     await knex.schema.createTable(tableNames.manufacture, (table) => {
@@ -80,6 +75,7 @@ exports.up = async (knex) => {
         addDefaultColumns(table);
 
     });
+
   
 };
 
@@ -88,14 +84,15 @@ exports.down = async(knex) => {
     await Promise.all([
         tableNames.user,
         tableNames.item_type,
-        tableNames.country,
-        tableNames.state,
         tableNames.shape,
         tableNames.location,
+        tableNames.country,
+        tableNames.manufacture,
         tableNames.address,
-        tableNames.manufacture
+        tableNames.state,
     ].map(tablename => knex.schema.dropTable(tablename)));
-
+    
+ 
     await knex.schema.dropTable(tableNames.user);
   
 };

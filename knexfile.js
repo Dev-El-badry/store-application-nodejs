@@ -15,6 +15,24 @@ module.exports = {
     },
     migrations: {
       directory: './db/migrations'
+    },
+    seeds: {
+      directory: './db/seeds'
+    }
+  },
+  test: {
+
+    client: 'mysql',
+    connection: {
+      database: process.env.MYSQL_TEST_DB,
+      user: process.env.MYSQL_USERNAME,
+      password: process.env.MYSQL_PASSWORD
+    },
+    migrations: {
+      directory: './db/migrations'
+    },
+    seeds: {
+      directory: './db/seeds'
     }
   }
 
