@@ -1,0 +1,73 @@
+
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "title": "The User schema",
+    
+ 
+    "required": [
+        "email",
+        "password",
+        "name"
+    ],
+    "properties": {
+        "id": {
+            "$id": "#/properties/id",
+            "type": "integer",
+            "title": "The database id of user"
+         
+        },
+        "email": {
+            "$id": "#/properties/email",
+            "type": "string",
+            "title": "The email user",
+           
+            "examples": [
+                "eslam@admin.com"
+            ]
+        },
+        "password": {
+            "$id": "#/properties/password",
+            "type": "string",
+            "title": "The user hashed password "
+         
+        },
+        "name": {
+            "$id": "#/properties/name",
+            "type": "string",
+            "title": "The user name",
+            "examples": [
+                "eslam"
+            ]
+        },
+        "last_login": {
+            "$id": "#/properties/last_login",
+            "type": "null",
+            "title": "The last_login schema",
+            "description": "the last time login user with account"
+          
+        },
+        "created_at": {
+            "$id": "#/properties/created_at",
+            "type": "string",
+            "title": "The created_at schema",
+            "description": "datetime of create  user account"
+        
+        },
+        "updated_at": {
+            "$id": "#/properties/updated_at",
+            "type": "string",
+            "title": "The updated_at schema",
+            "description": "datetime of updated user account "
+           
+        },
+        "deleted_at": {
+            "$id": "#/properties/deleted_at",
+            "type": "null",
+            "title": "The deleted_at user account"
+           
+           
+        }
+    },
+    "additionalProperties": true
+}

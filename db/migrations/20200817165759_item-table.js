@@ -17,10 +17,10 @@ const {
 
 exports.up = async (knex) => {
 
-  
+
 
     await knex.schema.createTable(tableNames.size, (table) => {
-      
+
         table.increments();
         table.string('name', 120).notNullable;
         table.float('length');
@@ -72,13 +72,13 @@ exports.up = async (knex) => {
         references(table, tableNames.item, false, 'related_item');
         addDefaultColumns(table);
     });
-  
+
 };
 
 
 exports.down = async (knex) => {
 
-  
+
 
     await Promise.all(
         [

@@ -18,11 +18,11 @@ exports.up = async (knex) => {
             table.string('password', 127).notNullable();
             table.string('name', 254).notNullable();
             table.datetime('last_login');
-    
+
             addDefaultColumns(table);
         }),
         createNameTable(knex, tableNames.item_type),
-       
+
         createNameTable(knex, tableNames.shape),
 
         knex.schema.createTable(tableNames.country, (table) => {
@@ -31,7 +31,7 @@ exports.up = async (knex) => {
             table.string('code');
             addDefaultColumns(table);
         }),
-         
+
 
         knex.schema.createTable(tableNames.location, (table) => {
             table.increments().notNullable();
@@ -42,27 +42,27 @@ exports.up = async (knex) => {
     ]);
 
     await knex.schema.createTable(tableNames.state, (table) => {
-        table.increments().notNullable();
-        table.string('name', 254);
-        table.string('code');
-        table.integer('country_id');
-        // references(table, tableNames.country, false);
-        addDefaultColumns(table);
-    }),
-    
+            table.increments().notNullable();
+            table.string('name', 254);
+            table.string('code');
+           
+            references(table, tableNames.country, false);
+            addDefaultColumns(table);
+        }),
 
-    await knex.schema.createTable(tableNames.address, (table) => {
-        table.increments().notNullable();
-        table.string('street_address_1', 50).notNullable();
-        table.string('street_address_2', 50);
-        table.string('city', 50).notNullable();
-        table.string('zipcode', 15).notNullable();
-        table.float('latitude').notNullable();
-        table.float('longitude').notNullable();
-        addDefaultColumns(table);
-        references(table, tableNames.state);
-       
-    });
+
+        await knex.schema.createTable(tableNames.address, (table) => {
+            table.increments().notNullable();
+            table.string('street_address_1', 50).notNullable();
+            table.string('street_address_2', 50);
+            table.string('city', 50).notNullable();
+            table.string('zipcode', 15).notNullable();
+            table.float('latitude').notNullable();
+            table.float('longitude').notNullable();
+            references(table, tableNames.state);
+            addDefaultColumns(table);
+
+        });
 
     await knex.schema.createTable(tableNames.manufacture, (table) => {
         table.increments().notNullable();
@@ -76,10 +76,10 @@ exports.up = async (knex) => {
 
     });
 
-  
+
 };
 
-exports.down = async(knex) => {
+exports.down = async (knex) => {
 
     await Promise.all([
         tableNames.user,
@@ -91,8 +91,8 @@ exports.down = async(knex) => {
         tableNames.address,
         tableNames.state,
     ].map(tablename => knex.schema.dropTable(tablename)));
-    
- 
+
+
     await knex.schema.dropTable(tableNames.user);
-  
+
 };
